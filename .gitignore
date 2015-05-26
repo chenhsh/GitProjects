@@ -1,0 +1,16 @@
+
+.metadata/*.*
+
+*.ini
+
+*.index
+
+*.snap
+
+*.prefs
+
+.metadata/.lock
+
+NLP/.project
+
+*.class
