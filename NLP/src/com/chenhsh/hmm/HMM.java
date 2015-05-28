@@ -2,15 +2,15 @@ package com.chenhsh.hmm;
 
 public class HMM {
 	// 隐状态
-	protected int N;
+	public int N;
 	// 状态序列数
-	protected int M;
+	public int M;
 	// 状态转移概率
-	protected double[][] trans_p;
+	public double[][] trans_p;
 	// 隐状态表示为显状态的概率
-	protected double[][] emit_p;
+	public double[][] emit_p;
 	// 初始概率（隐状态初始概率分布）
-	protected double[] start_p;
+	public double[] start_p;
 	
 	public HMM() {}
 	
