@@ -1,10 +1,10 @@
 package com.chenhsh.LDA;
 
 
+
 import com.chenhsh.LDA.pojo.Doc;
 import com.chenhsh.LDA.pojo.Topic;
 import com.chenhsh.LDA.pojo.Vector;
-
 
 /**
  * LDA算法模型类，实现LDA中用到的算法
@@ -67,8 +67,8 @@ public class LDAGibbsModel {
 	public void  trainModel() {
 		//初始化模型参数
 		initModelParam();
-		
 		for (int i = 0; i < iteration; i++) {
+			System.out.println("iteration:" + i);
 			//MCMC中的burn-in 的过程
 			//对所有文档中的词，重新抽样，设置主题
 			for (int j = 0; j < burninNum; j++) {
@@ -93,8 +93,9 @@ public class LDAGibbsModel {
 	 * 保存模型训练的参数
 	 */
 	public void saveModel() {
-		
+		// TODO:保存到文件
 	}
+	
 	
 	/**
 	 * 初始化模型参数
@@ -210,4 +211,17 @@ public class LDAGibbsModel {
 	public LDA getLda() {
 		return lda;
 	}
+
+	public double[][] getPhi() {
+		return phi;
+	}
+
+	public double[][] getTheta() {
+		return theta;
+	}
+
+	public int getBurninNum() {
+		return burninNum;
+	}
+	
 }

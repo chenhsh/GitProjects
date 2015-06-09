@@ -28,7 +28,11 @@ public class Doc {
 	 */
 	public void addVector(Vector vector) {
 		vectors.add(vector);
-		topicArray[vector.getTopicId()]++;
+		try {
+			topicArray[vector.getTopicId()]++;
+		} catch(Exception e) {
+			System.out.println("");
+		}
 	}
 
 	/**

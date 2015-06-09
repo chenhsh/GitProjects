@@ -32,6 +32,7 @@ public class LDA {
 
 	
 	public LDA(int topicNum) {
+		this.topicNum = topicNum;
 		docs = new ArrayList<Doc>();
 	}
 	
