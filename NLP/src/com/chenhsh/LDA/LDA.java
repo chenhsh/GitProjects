@@ -43,7 +43,7 @@ public class LDA {
 		Doc docObj = new Doc(name, topicNum);
 		Integer vId = null;
 		int topicId = 0;
-		this.vCount++;
+		this.dCount++;
 		for (String w : words) {
 			vId = vectorMap.get(w);
 			if (vId == null) {

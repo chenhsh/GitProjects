@@ -28,11 +28,11 @@ public class LDAUtil {
 		int topNum = 20;
 		double[] scores = null;
 		VecotrEntry pollFirst = null;
-		for (int i = 0; i < topNum; i++) {
-			System.out.println("topic " + i + "\t:\n");
+		for (int i = 0; i < ldaGibbs.getLda().getTopicNum(); i++) {
+			System.out.print("\n" + "topic " + i + ":");
 			MinMaxPriorityQueue<VecotrEntry> mmp = MinMaxPriorityQueue.create();
 			scores = ldaGibbs.getPhi()[i];
-			for (int j = 0; j < ldaGibbs.getLda().getTopicNum(); j++) {
+			for (int j = 0; j < ldaGibbs.getLda().getvCount(); j++) {
 				mmp.add(new VecotrEntry(j, scores[j]));
 			}
 
@@ -41,9 +41,9 @@ public class LDAUtil {
 					break;
 				}
 				pollFirst = mmp.pollFirst();
-				System.out.println("\t" + ldaGibbs.getLda().getVectorMap().inverse().get(pollFirst.id) + " "
-						+ pollFirst.score);
+				System.out.print(ldaGibbs.getLda().getVectorMap().inverse().get(pollFirst.id) + " ; ");
 			}
+			
 		}
 	}	
 		

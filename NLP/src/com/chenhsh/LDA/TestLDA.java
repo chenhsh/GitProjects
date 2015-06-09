@@ -17,7 +17,7 @@ public class TestLDA {
 		double alpha = (double)50 / topicNum;
 		double beta = 0.1;
 		int iteration = 10;
-		int burninNum = 20;
+		int burninNum = 10;
 		
 		System.out.println("初始化LDA");
 		//初始化设置主题20
