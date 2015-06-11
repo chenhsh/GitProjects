@@ -1,8 +1,9 @@
-package com.chenhsh.PLSA;
+package com.chenhsh;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -11,63 +12,67 @@ import java.util.List;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.ToAnalysis;
 
-import com.chenhsh.PLSA.pojo.PLSAData;
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
-
-public class PLSAUtils {
+public class FileUtil {
 	
-	public static void loadDataFromFile(String filename, PLSAData plsa) {
-		BufferedReader newReader = null;
+	public static String getFileContent(String filename) {
+		
+		BufferedReader br = null;
+		StringBuffer contentBuff = new StringBuffer();
 		try {
-			newReader = Files.newReader(new File(filename), Charsets.UTF_8);
-			String tempContent =null ;
-			int i = 0;
-			while((tempContent=newReader.readLine()) != null){
-				System.out.println("loadfile:"+i);
-				List<String> words = getSegResult(tempContent);
-				plsa.addDoc(String.valueOf(i),words);
-				i++;
-				if(i>=100){
-					break ;
-				}
+			br = new BufferedReader(new FileReader(new File(filename)));
+			String temp = null;
+			while ((temp = br.readLine()) != null) {
+				contentBuff.append(temp);
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				newReader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			if(br!=null)
+				try {
+					br.close() ;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
-	}
+		return contentBuff.toString();	
+	}	
+
 	/**
 	 * 获取分词结果
 	 * @param content
 	 * @return
 	 * @throws IOException
 	 */
-	public static List<String> getSegResult(String content) throws IOException {
+	public static List<String> getSegResult(String content) {
 		BufferedReader br = null;
 		List<String> allTerm = null;
 		try {
 			br = new BufferedReader(new StringReader(content));
 			String temp = null;
 			allTerm = new ArrayList<String>();
-			while ((temp = br.readLine()) != null) {
-				List<Term> paser = ToAnalysis.parse(temp);
-				for (Term term : paser) {
-					if (!filter(term)) {
-						allTerm.add(term.getName());
+			try {
+				while ((temp = br.readLine()) != null) {
+					List<Term> paser = ToAnalysis.parse(temp);
+					for (Term term : paser) {
+						if (!filter(term)) {
+							allTerm.add(term.getName());
+						}
 					}
 				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		} finally {
 			if(br!=null)
-				br.close() ;
+				try {
+					br.close() ;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 		return allTerm;
 	}
@@ -89,4 +94,5 @@ public class PLSAUtils {
 		}
 		return false;
 	}
+
 }
