@@ -54,7 +54,7 @@ public class PLSAModel {
 			
 			//计算最大似然函数，结果
 			double l = computeLogLikelihood();
-			System.out.println("iteration: " + i + " : " + l);
+			System.out.println("iteration: " + i + " : log likelihood is:" + l);
 		}
 	}
 	
@@ -85,7 +85,6 @@ public class PLSAModel {
 				totalDenominator += numerator;
 			}
 			if (totalDenominator == 0.0) {
-				System.out.println("total zero");
                 totalDenominator = avoidZero(totalDenominator);
             }
 			for (int v = 0; v <plsaData.getvCount(); v++) {
@@ -105,7 +104,6 @@ public class PLSAModel {
 				totalDenominator += numerator;
 			}
 			if (totalDenominator == 0.0) {
-				System.out.println("total zero");
                 totalDenominator = avoidZero(totalDenominator);
             }
 			for (int k = 0; k < topicNum; k++) {
@@ -136,7 +134,6 @@ public class PLSAModel {
 				}
 				if (total == 0.0) {
 					total = avoidZero(total);
-					System.out.println("total zero");
 				}
 				for (int k = 0; k < topicNum; k++) {
 					docTermTopicPros[d][v][k] = preTopicProb[k] / total;
@@ -148,36 +145,41 @@ public class PLSAModel {
 	/**
 	 * 计算最大似然估计值
 	 * 
-	 */
+     * Compute the log likelihood of generation the corpus
+     * 
+     * L = sum_i {n(d_i) * [sum_j( n(d_i, w_j) / n(d_i) * log sum_k p(z_k|d_i)*p(w_j|z_k))]}
+     * 
+     */
 	public double computeLogLikelihood() {
-		double L = 0.0;
-		for (int d = 0; d < plsaData.getdCount(); d++) {
-			for (int v = 0; v < plsaData.getvCount(); v++) {
-				int nSize = docTermMatrix[d][v];
-				double sumK = 0.0;
-				for (int k = 0; k < topicNum; k++) {
-					sumK += docTermTopicPros[d][v][k] * Math.log10(topicTermProbs[k][v] * docTopicProbs[d][k]);
-				}
-				L += nSize * sumK;
-			}
-		}
-		return L;
-		
-
 //		double L = 0.0;
 //		for (int d = 0; d < plsaData.getdCount(); d++) {
-//			int docTermSize = plsaData.getDocs().get(d).getTerms().size();
-//			double sumV = 0.0;
 //			for (int v = 0; v < plsaData.getvCount(); v++) {
+//				int nSize = docTermMatrix[d][v];
 //				double sumK = 0.0;
 //				for (int k = 0; k < topicNum; k++) {
-//					sumK += docTopicProbs[d][k] * topicTermProbs[k][v];
+//					sumK = sumK + docTermTopicPros[d][v][k] * Math.log10(topicTermProbs[k][v] * docTopicProbs[d][k]);
 //				}
-//				sumV += ((double) docTermMatrix[d][v] / docTermSize) * Math.log10(sumK); 
+//				L += nSize * sumK;
+//				if (L < (-Double.MAX_VALUE + 1000.0)) {
+//					System.out.println("L:" + L);
+//				}
 //			}
-//			L += docTermSize * sumV;
 //		}
 //		return L;
+		double L = 0.0;
+		for (int d = 0; d < plsaData.getdCount(); d++) {
+			int docISize = plsaData.getDocs().get(d).getTerms().size();
+			double sumM = 0.0;
+			for (int v = 0; v < plsaData.getvCount(); v++) {
+				double sumK = 0.0;
+				for (int k = 0; k < topicNum; k++) {
+					sumK += docTopicProbs[d][k] * topicTermProbs[k][v];
+				}
+				sumM += (double) docTermMatrix[d][v] / docISize * Math.log10(sumK); 
+			}
+			L += docISize * sumM;
+		}
+		return L;
 	}
 	
 	/**

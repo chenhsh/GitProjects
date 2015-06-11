@@ -16,7 +16,8 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 public class PLSAUtils {
-	public static void loadDataFromFile(String filename, PLSAData plsa, int fileSize) {
+	
+	public static void loadDataFromFile(String filename, PLSAData plsa) {
 		BufferedReader newReader = null;
 		try {
 			newReader = Files.newReader(new File(filename), Charsets.UTF_8);
@@ -27,7 +28,7 @@ public class PLSAUtils {
 				List<String> words = getSegResult(tempContent);
 				plsa.addDoc(String.valueOf(i),words);
 				i++;
-				if(i>=fileSize){
+				if(i>=100){
 					break ;
 				}
 			}
